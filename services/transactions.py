@@ -1,20 +1,28 @@
 import requests
-
+import json
 
 def getTransactions(address, APIKEY):
-    api= f"https://api.etherscan.io/api?module=account&action=txlist&address={address}&startblock=0&endblock=99999999&page=1&offset=10&sort=asc&apikey={APIKEY}"
-    data= requests.get(api)
-    if(data.status_code==200):
-        responsedata= data.json()
-        response= responsedata["result"]
-        cnt=0
-        for i in response:
-            if i["isError"]=="0":
-                cnt= cnt+1
-        print(cnt)
-        return cnt
+    url = "https://docs-demo.bera-artio.quiknode.pro/"
+    payload = json.dumps({
+    "method": "eth_getTransactionCount",
+    "params": [
+        address,
+        "latest"
+    ],
+    "id": 1,
+    "jsonrpc": "2.0"
+    })
+    headers = {
+    'Content-Type': 'application/json'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    if(response.status_code==200):
+        data= response.json()
+        print(int(data["result"], 16))
+        return int(data["result"], 16)
     else:
-        print(f"Error is {data.status_code}")
+        return f"Error: {response.status_code}"
 
 
 
