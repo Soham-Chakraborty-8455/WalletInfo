@@ -23,3 +23,6 @@ def hello(address):
             "Contracts": contractz,
             "Volume (in wei)": volumez
         })
+    
+if __name__ == "__main__":
+    app.run(host='0.0.0.0')
